@@ -7,6 +7,8 @@ const BLINKS: usize = 75;
 
 struct Cache {
     map: HashMap<usize, [usize; BLINKS]>,
+    hits: usize,
+    misses: usize,
 }
 
 impl std::fmt::Debug for Cache {
@@ -26,19 +28,24 @@ impl Cache {
     fn new() -> Self {
         Self {
             map: HashMap::new(),
+            hits: 0,
+            misses: 0
         }
     }
 
-    fn get(&self, index: usize, iteration: usize) -> Option<usize> {
+    fn get(&mut self, index: usize, iteration: usize) -> Option<usize> {
         assert!(iteration < BLINKS);
 
         if let Some(arr) = self.map.get(&index) {
             if arr[iteration] > 0 {
+                self.hits += 1;
                 Some(arr[iteration])
             } else {
+                self.misses += 1;
                 None
             }
         } else {
+            self.misses += 1;
             None
         }
     }
@@ -117,6 +124,7 @@ fn main() {
     }
 
     println!("{:?}", starting_values);
+    println!("Cache - Hits: {:?}, Misses: {:?}", cache.hits, cache.misses);
     println!("{:?}", cache);
-    println!("{:?}", acc);
+    println!("Stones: {:?}", acc);
 }
