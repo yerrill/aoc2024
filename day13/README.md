@@ -14,15 +14,15 @@ Prize: X=8400, Y=5400
 
 Setting up equations to isolate $X$ and $Y$ movement based on button presses of $a$ and $b$:
 
-1. $$ X = A_X a + B_X b $$
-2. $$ Y = A_Y a + B_Y b $$
+1. $ X = A_X a + B_X b $
+2. $ Y = A_Y a + B_Y b $
 
 Lowercase $a$ and $b$ are the number of button presses for buttons a and b. Uppercase respresent constants from the input like $X$ and $Y$. Subscripted constants like $A_X$ or $B_Y$ are the equation and the $X$ or $Y$ value they change.
 
 Substituting:
 
-1. $$ 8400 = 94 a + 22 b $$
-2. $$ 5400 = 34 a + 67 b $$
+1. $ 8400 = 94 a + 22 b $
+2. $ 5400 = 34 a + 67 b $
 
 Solve for $a$ with equation 1:
 
@@ -30,7 +30,7 @@ $$ a = \frac{8400 - 22 b}{94} $$
 
 Solve for $b$ with equation 2:
 
-$$ 5400 = 34 \left \frac{8400 - 22 b}{94} \right + 67 b $$
+$$ 5400 = 34 \left( \frac{8400 - 22 b}{94} \right) + 67 b $$
 
 $$ b = 40 $$
 
