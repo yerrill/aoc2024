@@ -220,10 +220,12 @@ impl<T: Eq + PartialEq + std::hash::Hash> MinHeap<T> {
 }
 
 pub struct Board<T: Clone + std::fmt::Debug, const R: usize, const C: usize> {
-    pub arr: [[T; C]; R],
+    arr: Vec<Vec<T>>,
 }
 
-impl<T: Clone + std::fmt::Debug, const R: usize, const C: usize> std::fmt::Debug for Board<T, R, C> {
+impl<T: Clone + std::fmt::Debug, const R: usize, const C: usize> std::fmt::Debug
+    for Board<T, R, C>
+{
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let mut out: String = String::new();
         out += "\n";
@@ -241,11 +243,17 @@ impl<T: Clone + std::fmt::Debug, const R: usize, const C: usize> std::fmt::Debug
 
 impl<T: Clone + std::fmt::Debug, const R: usize, const C: usize> Clone for Board<T, R, C> {
     fn clone(&self) -> Self {
-        Self { arr: self.arr.clone() }
+        Self {
+            arr: self.arr.clone(),
+        }
     }
 }
 
 impl<T: Clone + std::fmt::Debug, const R: usize, const C: usize> Board<T, R, C> {
+    pub fn new(v: Vec<Vec<T>>) -> Board<T, R, C> {
+        Self { arr: v }
+    }
+
     pub fn string_using(&self, f: fn(&T) -> String) -> String {
         //&dyn Fn(&T) -> &'static str
         let mut out: String = String::new();
@@ -261,7 +269,7 @@ impl<T: Clone + std::fmt::Debug, const R: usize, const C: usize> Board<T, R, C> 
         out
     }
 
-    fn is_valid_point(&self, p: Point) -> bool {
+    pub fn is_valid_point(&self, p: Point) -> bool {
         p.0 < R && p.1 < C
     }
 
@@ -296,7 +304,7 @@ impl<T: Clone + std::fmt::Debug, const R: usize, const C: usize> Board<T, R, C> 
         end_point: Point,
         valid_point: fn(&T) -> bool,
     ) -> (usize, Board<Option<usize>, R, C>) {
-        let mut cache: [[Option<usize>; C]; R] = [[None; C]; R];
+        let mut cache: Vec<Vec<Option<usize>>> = vec![vec![None; C]; R];
         let mut pq: MinHeap<Point> = MinHeap::new();
         let mut last_cost = 0;
 
@@ -319,7 +327,7 @@ impl<T: Clone + std::fmt::Debug, const R: usize, const C: usize> Board<T, R, C> 
                 let Some(new_point) = self.translate_point(current_point, dir.resolve()) else {
                     continue;
                 };
-                
+
                 let Some(val_new_point) = self.at(new_point) else {
                     continue;
                 };
