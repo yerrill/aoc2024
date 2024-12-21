@@ -219,11 +219,11 @@ impl<T: Eq + PartialEq + std::hash::Hash> MinHeap<T> {
     }
 }
 
-pub struct Board<T: std::fmt::Debug, const R: usize, const C: usize> {
+pub struct Board<T: Clone + std::fmt::Debug, const R: usize, const C: usize> {
     pub arr: [[T; C]; R],
 }
 
-impl<T: std::fmt::Debug, const R: usize, const C: usize> std::fmt::Debug for Board<T, R, C> {
+impl<T: Clone + std::fmt::Debug, const R: usize, const C: usize> std::fmt::Debug for Board<T, R, C> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let mut out: String = String::new();
         out += "\n";
@@ -239,7 +239,13 @@ impl<T: std::fmt::Debug, const R: usize, const C: usize> std::fmt::Debug for Boa
     }
 }
 
-impl<T: std::fmt::Debug, const R: usize, const C: usize> Board<T, R, C> {
+impl<T: Clone + std::fmt::Debug, const R: usize, const C: usize> Clone for Board<T, R, C> {
+    fn clone(&self) -> Self {
+        Self { arr: self.arr.clone() }
+    }
+}
+
+impl<T: Clone + std::fmt::Debug, const R: usize, const C: usize> Board<T, R, C> {
     pub fn string_using(&self, f: fn(&T) -> String) -> String {
         //&dyn Fn(&T) -> &'static str
         let mut out: String = String::new();

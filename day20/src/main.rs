@@ -1,5 +1,6 @@
 use std::collections::HashSet;
 use std::fs::File;
+use std::hash::Hash;
 use std::io::prelude::*;
 
 mod tools;
@@ -35,6 +36,7 @@ const SINGLE_MOVE_CHEAT: [(isize, isize); 8] = [
 
 type MazeBoard = Board<Option<usize>, ROWS, COLS>;
 
+/*
 fn find_cheats(board: &MazeBoard, pos: Point) -> HashSet<(Point, Point, usize)> {
     let mut set: HashSet<(Point, Point, usize)> = HashSet::new();
     let value_at_pos: isize = board.at(pos).unwrap().unwrap() as isize;
@@ -66,6 +68,50 @@ fn find_cheats(board: &MazeBoard, pos: Point) -> HashSet<(Point, Point, usize)> 
 
         if saved_time > 0 {
             set.insert((pos, new_pos, saved_time as usize));
+        }
+    }
+
+    set
+}*/
+
+
+fn create_modified(board: &MazeBoard, pos: Point, dir: (isize, isize)) -> MazeBoard {
+    let mut modified = board.clone();
+    let mut point = pos;
+
+    for i in 0..2 {
+        if let Some(new_p) = board.translate_point(point, dir) {
+            modified.set(new_p, Some(0));
+            point = new_p;
+        } else {
+            break;
+        }
+    }
+
+    modified
+}
+
+fn find_cheats2(board: &MazeBoard, start: Point, end: Point) -> HashSet<(Point, Point, usize)> {
+    const CHEAT_DIRS_ONE: [(isize, isize); 4] = [(-1, 0), (0, 1), (1, 0), (0, -1)];
+    const CHEAT_DIRS_TWO: [(isize, isize); 4] = [(-2, 0), (0, 2), (2, 0), (0, -2)];
+
+    let (base_time, _) = board.dijkstras(0, start, end, |v| v.is_some());
+    let mut new_time: usize;
+
+    let mut set: HashSet<(Point, Point, usize)> = HashSet::new();
+
+    let mut pos = start;
+
+    let mut modified: MazeBoard;
+
+    for i in 0..4 {
+        let point_one = board.translate_point(from, delta)
+        modified = create_modified(board, pos, dir.resolve());
+        (new_time, _) = modified.dijkstras(0, start, end, |v| v.is_some());
+        new_time = base_time - new_time;
+
+        if new_time > 0 {
+            set.insert(pos, )
         }
     }
 
